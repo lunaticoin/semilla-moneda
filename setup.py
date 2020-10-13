@@ -19,6 +19,7 @@ CLASSIFIERS = [
 ]
 
 CONSOLE_SCRIPTS = ["semilla-moneda=semilla_moneda.semilla_moneda:main"]
+PACKAGE_DATA = {'semilla-moneda': ['*.txt']}
 
 setuptools.setup(
     name="semilla-moneda",
@@ -29,7 +30,9 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/lunaticoin/semilla_moneda",
+    include_package_data=True,
     packages=setuptools.find_packages(),
+    package_data=PACKAGE_DATA,
     classifiers=CLASSIFIERS,
     python_requires=">=3.6",
     entry_points={"console_scripts": CONSOLE_SCRIPTS},

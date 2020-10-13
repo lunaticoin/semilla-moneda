@@ -1,6 +1,9 @@
+import os
 import hashlib
+from semilla_moneda import dir_path
 
 BITS_POR_PALABRA = 11
+
 
 
 def main():
@@ -36,7 +39,8 @@ def main():
 
     ### LEER PALABRAS DEL ARCHIVO bip39words.txt
     index_list = []
-    with open("bip39words.txt", "r", encoding="utf-8") as f:
+
+    with open(os.path.join(dir_path, "bip39words.txt"), "r", encoding="utf-8") as f:
         for w in f.readlines():
             index_list.append(w.strip())
 
