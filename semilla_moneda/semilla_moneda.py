@@ -3,12 +3,11 @@ import hashlib
 from semilla_moneda import dir_path
 
 BITS_POR_PALABRA = 11
-
-
+ENTROPIAS = [128, 160, 192, 224, 256]
 
 def main():
     ### INPUT DE ENTROPÍA BINARIA
-    binario = input("Introduce los 128, 160, 192, 224 o 256 bits de entropia: ")
+    binario = input("Introduce " + str(ENTROPIAS) + " bits de entropía: ")
     # Ejemplo 256 bits
     # binario = '0011001010000101011111010000101111111111101000001001000001001010110100010101111001001011000100111100011110001001111011110111011010010100110011001110111001100010111011010010101101010011110100100110101111110001100101011001000110100010000110110001100101110001'
     ## Ejemplo 128 bits
@@ -16,20 +15,21 @@ def main():
 
     ### DEFINIENDO VARIABLES DEL BIP39
     binario_len = len(binario)  # ENT en el BIP39
+    print(
+        f"\nLa longitud de la entropía introducida es de: {binario_len}"
+    )
+    if binario_len not in ENTROPIAS:
+        raise Exception("Entropía inválida. Verifica que tu entropía tenga una de estas longitudes: " + str(ENTROPIAS))
+
     cs = binario_len // 32  # CS en BIP39
     palabras_totales = int((binario_len + cs) // BITS_POR_PALABRA)  # MS en BIP39
 
     # Otras variables
     modulo = int(binario_len % BITS_POR_PALABRA)  # bits de la última palabra no pertenecientes al checksum
     extra_checksum_bits = binario[(binario_len - modulo) : binario_len]  # Los bits del checksum
-    print(
-        f"\nLa longitud de la entropia introducida es de: {binario_len}"
-        f"\n-- ¡ATENCIÓN! Verifica que tu entropía tenga una de estas longitudes: 128, 160, 192, 224, 256"
-    )
 
     ### CONVERSIONES Y HASH
-    random_hex = f"{int(binario, 2):x}"
-    random_bin = bytes.fromhex(random_hex)
+    random_bin = int(binario, 2).to_bytes(binario_len // 8, byteorder = 'big')
     numbytes = len(random_bin)
 
     hashed_sha256 = hashlib.sha256(random_bin).hexdigest()
